@@ -1,0 +1,33 @@
+# Build
+**/*.exe
+bin/
+
+# venv
+**/vendor/
+
+# Log
+**/*.log
+
+# VSCode settings
+**/*.vscode
+
+# IDEA files
+**/*.idea
+
+# OSX dir files
+**/*.DS_Store
+
+# Sublime Text settings
+**/*.sublime-workspace
+**/*.sublime-project
+
+# Node
+**/node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/

@@ -1,0 +1,8 @@
+Name: go_zero_example-api
+Host: 0.0.0.0
+Port: 8888
+MongoUri: mongodb://admin:adminpassword123@localhost:27017
+Database: go_zero_example
+Auth:
+  AccessSecret: pokitpeng
+  AccessExpire: 1800
