@@ -1,11 +1,10 @@
-package logic
+package user
 
 import (
 	"context"
+	model "go_zero_example/model/mongo"
 	"net/http"
 	"time"
-
-	model "go_zero_example/model/mongo"
 
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"

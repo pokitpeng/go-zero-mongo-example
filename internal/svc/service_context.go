@@ -12,8 +12,8 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	UserModel := model.NewUserModel(c.MongoUri, c.Database)
-	ItemModel := model.NewItemModel(c.MongoUri, c.Database)
+	UserModel := model.NewUserModel(c.MongoUri, c.Database, c.CacheRedis)
+	ItemModel := model.NewItemModel(c.MongoUri, c.Database, c.CacheRedis)
 	return &ServiceContext{
 		Config:    c,
 		UserModel: UserModel,

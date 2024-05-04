@@ -4,14 +4,18 @@ build: ## build server
 	go build .
 
 fmt: ## format code
-	goctl api format --dir .
-	gofumpt -w .
+	goctl api format --dir ./api
+	gofumpt -w ./api
 
-go: ## generate go code
-	goctl api go -api *.api -dir . -style go_zero
+go: fmt ## generate go code
+	goctl api go -api ./api/*.api -dir . -style go_zero
 
 model: ## generate model code
-	goctl model mongo --type user,item --dir model/mongo -style go_zero -e --home tpl
+	goctl model mongo --type user,item --dir model/mongo -style go_zero -e --home tpl -c
+
+swagger: fmt ## generate swagger docs
+	rm -rf ./api/go_zero_example.json
+	goctl api plugin -plugin goctl-swagger="swagger -filename go_zero_example.json" -api ./api/go_zero_example.api -dir ./api
 
 run: ## run server
 	go run .

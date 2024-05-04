@@ -3,6 +3,7 @@ package model
 import (
     "context"
 
+    {{if .Cache}}"github.com/zeromicro/go-zero/core/stores/cache"{{end}}
     {{if .Cache}}"github.com/zeromicro/go-zero/core/stores/monc"{{else}}"github.com/zeromicro/go-zero/core/stores/mon"{{end}}
 )
 
@@ -26,8 +27,8 @@ type (
 
 
 // New{{.Type}}Model returns a model for the mongo.
-{{if .Easy}}func New{{.Type}}Model(url, db string{{if .Cache}}, c cache.CacheConf{{end}}) {{.Type}}Model {
-    conn := {{if .Cache}}monc{{else}}mon{{end}}.MustNewModel(url, db, {{.Type}}CollectionName{{if .Cache}}, c{{end}})
+{{if .Easy}}func New{{.Type}}Model(url, db string{{if .Cache}}, c cache.CacheConf, opts ...cache.Option{{end}}) {{.Type}}Model {
+    conn := {{if .Cache}}monc{{else}}mon{{end}}.MustNewModel(url, db, {{.Type}}CollectionName{{if .Cache}}, c, opts...{{end}})
     ensureIndexes(context.Background(), new({{.Type}}), conn)
     return &custom{{.Type}}Model{
         default{{.Type}}Model: newDefault{{.Type}}Model(conn),

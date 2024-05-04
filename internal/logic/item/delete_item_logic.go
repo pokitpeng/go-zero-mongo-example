@@ -1,4 +1,4 @@
-package logic
+package item
 
 import (
 	"context"
@@ -31,5 +31,11 @@ func (l *DeleteItemLogic) DeleteItem(req *types.DeleteItemReq) (resp *types.Dele
 	if err != nil {
 		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("delete item error: %v", err))
 	}
-	return
+	return &types.DeleteItemResp{
+		Code: 0,
+		Msg:  "ok",
+		Data: types.IsOK{
+			IsOK: true,
+		},
+	}, nil
 }

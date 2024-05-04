@@ -5,13 +5,15 @@ import (
 	"context"
 	"time"
 
-	"github.com/zeromicro/go-zero/core/stores/mon"
+	"github.com/zeromicro/go-zero/core/stores/monc"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/protobuf/proto"
 )
+
+var prefixItemCacheKey = "cache:item:"
 
 type itemModel interface {
 	Insert(ctx context.Context, data *Item) error
@@ -22,10 +24,10 @@ type itemModel interface {
 }
 
 type defaultItemModel struct {
-	conn *mon.Model
+	conn *monc.Model
 }
 
-func newDefaultItemModel(conn *mon.Model) *defaultItemModel {
+func newDefaultItemModel(conn *monc.Model) *defaultItemModel {
 	return &defaultItemModel{conn: conn}
 }
 
@@ -38,7 +40,8 @@ func (m *defaultItemModel) Insert(ctx context.Context, data *Item) error {
 	data.UpdateAt = proto.Int64(now)
 	data.DeleteAt = proto.Int64(0)
 
-	_, err := m.conn.InsertOne(ctx, data)
+	key := prefixItemCacheKey + data.ID.Hex()
+	_, err := m.conn.InsertOne(ctx, key, data)
 	return err
 }
 
@@ -49,12 +52,12 @@ func (m *defaultItemModel) FindOne(ctx context.Context, id string) (*Item, error
 	}
 
 	var data Item
-
-	err = m.conn.FindOne(ctx, &data, bson.M{"_id": oid})
+	key := prefixItemCacheKey + id
+	err = m.conn.FindOne(ctx, key, &data, bson.M{"_id": oid, "DeleteAt": 0})
 	switch err {
 	case nil:
 		return &data, nil
-	case mon.ErrNotFound:
+	case monc.ErrNotFound:
 		return nil, ErrNotFound
 	default:
 		return nil, err
@@ -63,8 +66,8 @@ func (m *defaultItemModel) FindOne(ctx context.Context, id string) (*Item, error
 
 func (m *defaultItemModel) Update(ctx context.Context, data *Item) (*mongo.UpdateResult, error) {
 	data.UpdateAt = proto.Int64(time.Now().Unix())
-
-	res, err := m.conn.UpdateOne(ctx, bson.M{"_id": data.ID}, bson.M{"$set": data})
+	key := prefixItemCacheKey + data.ID.Hex()
+	res, err := m.conn.UpdateOne(ctx, key, bson.M{"_id": data.ID}, bson.M{"$set": data})
 	return res, err
 }
 
@@ -74,18 +77,18 @@ func (m *defaultItemModel) Delete(ctx context.Context, id string, realDelete boo
 		return 0, ErrInvalidObjectId
 	}
 	if realDelete {
-
-		res, err := m.conn.DeleteOne(ctx, bson.M{"_id": oid})
+		key := prefixItemCacheKey + id
+		res, err := m.conn.DeleteOne(ctx, key, bson.M{"_id": oid})
 		return res, err
 	} else {
-
+		key := prefixItemCacheKey + id
 		data, err := m.FindOne(ctx, id)
 		if err != nil {
 			return 0, err
 		}
 		data.DeleteAt = proto.Int64(time.Now().Unix())
-		res, err := m.conn.UpdateOne(ctx, bson.M{"_id": oid}, bson.M{"$set": data})
-
+		res, err := m.conn.UpdateOne(ctx, key, bson.M{"_id": oid}, bson.M{"$set": data})
+		m.conn.DelCache(ctx, key)
 		return res.ModifiedCount, err
 	}
 }
@@ -99,7 +102,7 @@ func (m *defaultItemModel) List(ctx context.Context, filter *Item, offset, limit
 	total, err := m.conn.CountDocuments(ctx, filter)
 	switch err {
 	case nil:
-	case mon.ErrNotFound:
+	case monc.ErrNotFound:
 		return nil, 0, ErrNotFound
 	default:
 		return nil, 0, err
@@ -118,7 +121,7 @@ func (m *defaultItemModel) List(ctx context.Context, filter *Item, offset, limit
 	err = m.conn.Find(ctx, &datas, filter, findOptions)
 	switch err {
 	case nil:
-	case mon.ErrNotFound:
+	case monc.ErrNotFound:
 		return nil, total, ErrNotFound
 	default:
 		return nil, total, err

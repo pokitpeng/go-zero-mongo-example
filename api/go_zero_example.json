@@ -1,0 +1,689 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/item": {
+      "get": {
+        "operationId": "ListItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListItemResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "Size",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "15"
+          },
+          {
+            "name": "OrderBy",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "[ID"
+            ],
+            "default": "ID"
+          },
+          {
+            "name": "Order",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "[Desc"
+            ],
+            "default": "Desc"
+          }
+        ],
+        "tags": [
+          "item"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CreateItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateItemResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateItemReq"
+            }
+          }
+        ],
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UpdateItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateItemResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateItemReq"
+            }
+          }
+        ],
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/item/{id}": {
+      "get": {
+        "operationId": "GetItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetItemResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "DeleteItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteItemResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteItemReq"
+            }
+          }
+        ],
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/user": {
+      "post": {
+        "operationId": "CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateUserResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LoginResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/swagger": {
+      "get": {
+        "operationId": "Swagger",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "tags": [
+          "base"
+        ]
+      }
+    },
+    "/version": {
+      "get": {
+        "operationId": "Version",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/VersionResp"
+            }
+          }
+        },
+        "tags": [
+          "base"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateItemReq": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Age": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Secret": {
+          "type": "string"
+        }
+      },
+      "title": "CreateItemReq",
+      "required": [
+        "Name",
+        "Age",
+        "Secret"
+      ]
+    },
+    "CreateItemResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/IsOK"
+        }
+      },
+      "title": "CreateItemResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    },
+    "CreateUserReq": {
+      "type": "object",
+      "properties": {
+        "Username": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "title": "CreateUserReq",
+      "required": [
+        "Username",
+        "Password"
+      ]
+    },
+    "CreateUserResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/IsOK"
+        }
+      },
+      "title": "CreateUserResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    },
+    "DeleteItemReq": {
+      "type": "object",
+      "title": "DeleteItemReq"
+    },
+    "DeleteItemResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/IsOK"
+        }
+      },
+      "title": "DeleteItemResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    },
+    "GetItemReq": {
+      "type": "object",
+      "title": "GetItemReq"
+    },
+    "GetItemResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/Item"
+        }
+      },
+      "title": "GetItemResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    },
+    "IsOK": {
+      "type": "object",
+      "properties": {
+        "IsOK": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      },
+      "title": "IsOK",
+      "required": [
+        "IsOK"
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Age": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "secret": {
+          "type": "string"
+        },
+        "UpdateAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "CreateAt": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Item",
+      "required": [
+        "ID",
+        "Name",
+        "Age",
+        "-",
+        "UpdateAt",
+        "CreateAt"
+      ]
+    },
+    "ListItemReq": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1"
+        },
+        "Size": {
+          "type": "integer",
+          "format": "int64",
+          "default": "15"
+        },
+        "OrderBy": {
+          "type": "string",
+          "enum": [
+            "[ID"
+          ],
+          "default": "ID"
+        },
+        "Order": {
+          "type": "string",
+          "enum": [
+            "[Desc"
+          ],
+          "default": "Desc"
+        }
+      },
+      "title": "ListItemReq"
+    },
+    "ListItemResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "Total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "ListItemResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data",
+        "Total"
+      ]
+    },
+    "LoginReq": {
+      "type": "object",
+      "properties": {
+        "Username": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "title": "LoginReq",
+      "required": [
+        "Username",
+        "Password"
+      ]
+    },
+    "LoginResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/LoginRespData"
+        }
+      },
+      "title": "LoginResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    },
+    "LoginRespData": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "Token": {
+          "type": "string"
+        },
+        "ExpireAt": {
+          "type": "string"
+        }
+      },
+      "title": "LoginRespData",
+      "required": [
+        "ID",
+        "Username",
+        "Token",
+        "ExpireAt"
+      ]
+    },
+    "UpdateItemReq": {
+      "type": "object",
+      "title": "UpdateItemReq"
+    },
+    "UpdateItemResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/IsOK"
+        }
+      },
+      "title": "UpdateItemResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "UpdateAt": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "CreateAt": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "User",
+      "required": [
+        "ID",
+        "Username",
+        "Password",
+        "UpdateAt",
+        "CreateAt"
+      ]
+    },
+    "Version": {
+      "type": "object",
+      "properties": {
+        "Version": {
+          "type": "string"
+        }
+      },
+      "title": "Version",
+      "required": [
+        "Version"
+      ]
+    },
+    "VersionResp": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Msg": {
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/Version"
+        }
+      },
+      "title": "VersionResp",
+      "required": [
+        "Code",
+        "Msg",
+        "Data"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

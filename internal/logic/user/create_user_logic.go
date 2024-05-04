@@ -1,13 +1,13 @@
-package logic
+package user
 
 import (
 	"context"
 	"fmt"
+	model "go_zero_example/model/mongo"
 	"net/http"
 
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
-	model "go_zero_example/model/mongo"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/x/errors"

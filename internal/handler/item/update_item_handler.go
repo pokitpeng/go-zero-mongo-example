@@ -1,24 +1,25 @@
-package handler
+package item
 
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
-	"go_zero_example/internal/logic"
+	"go_zero_example/internal/logic/item"
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func UpdateItemHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LoginReq
+		var req types.UpdateItemReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := logic.NewLoginLogic(r.Context(), svcCtx)
-		resp, err := l.Login(&req)
+		l := item.NewUpdateItemLogic(r.Context(), svcCtx)
+		resp, err := l.UpdateItem(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

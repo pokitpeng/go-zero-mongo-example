@@ -3,7 +3,8 @@ package model
 import (
 	"context"
 
-	"github.com/zeromicro/go-zero/core/stores/mon"
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/monc"
 )
 
 const ItemCollectionName = "item"
@@ -23,8 +24,8 @@ type (
 )
 
 // NewItemModel returns a model for the mongo.
-func NewItemModel(url, db string) ItemModel {
-	conn := mon.MustNewModel(url, db, ItemCollectionName)
+func NewItemModel(url, db string, c cache.CacheConf, opts ...cache.Option) ItemModel {
+	conn := monc.MustNewModel(url, db, ItemCollectionName, c, opts...)
 	ensureIndexes(context.Background(), new(Item), conn)
 	return &customItemModel{
 		defaultItemModel: newDefaultItemModel(conn),

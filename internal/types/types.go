@@ -5,6 +5,16 @@ type IsOK struct {
 	IsOK bool `json:"IsOK"`
 }
 
+type Version struct {
+	Version string `json:"Version"`
+}
+
+type VersionResp struct {
+	Code int64   `json:"Code"`
+	Msg  string  `json:"Msg"`
+	Data Version `json:"Data"`
+}
+
 type User struct {
 	ID       string `json:"ID"`
 	Username string `json:"Username"`
@@ -19,7 +29,7 @@ type CreateUserReq struct {
 }
 
 type CreateUserResp struct {
-	Code int    `json:"Code"`
+	Code int64  `json:"Code"`
 	Msg  string `json:"Msg"`
 	Data IsOK   `json:"Data"`
 }
@@ -37,7 +47,7 @@ type LoginRespData struct {
 }
 
 type LoginResp struct {
-	Code int           `json:"Code"`
+	Code int64         `json:"Code"`
 	Msg  string        `json:"Msg"`
 	Data LoginRespData `json:"Data"`
 }
@@ -58,55 +68,52 @@ type CreateItemReq struct {
 }
 
 type CreateItemResp struct {
-	Code int    `json:"Code"`
+	Code int64  `json:"Code"`
 	Msg  string `json:"Msg"`
 	Data IsOK   `json:"Data"`
 }
 
 type GetItemReq struct {
-	ID string `path:"ID"`
+	ID string `path:"id"`
 }
 
 type GetItemResp struct {
-	Code int    `json:"Code"`
+	Code int64  `json:"Code"`
 	Msg  string `json:"Msg"`
 	Data Item   `json:"Data"`
 }
 
 type ListItemReq struct {
 	Name    string `form:"Name,optional"`
-	Page    int    `form:"Page,default=1"`
-	Size    int    `form:"Size,default=15"`
-	OrderBy string `form:"OrderBy,default=ID,options=[ID,Name,Age,UpdateAt,CreateAt]"`
-	Order   string `form:"Order,default=Desc,options=[Desc,Asc]"`
+	Page    int64  `form:"Page,optional,default=1"`
+	Size    int64  `form:"Size,optional,default=15"`
+	OrderBy string `form:"OrderBy,optional,default=ID,options=[ID,Name,Age,UpdateAt,CreateAt]"`
+	Order   string `form:"Order,optional,default=Desc,options=[Desc,Asc]"`
 }
 
 type ListItemResp struct {
-	Code  int    `json:"Code"`
-	Msg   string `json:"Msg"`
-	Data  []Item `json:"Data"`
-	Total int    `json:"Total"`
+	Code  int64   `json:"Code"`
+	Msg   string  `json:"Msg"`
+	Data  []*Item `json:"Data"`
+	Total int64   `json:"Total"`
 }
 
 type UpdateItemReq struct {
-	ID     string `path:"ID"`
-	Name   string `json:"Name"`
-	Age    int64  `json:"Age"`
-	Secret string `json:"Secret"`
+	*Item
 }
 
 type UpdateItemResp struct {
-	Code int    `json:"Code"`
+	Code int64  `json:"Code"`
 	Msg  string `json:"Msg"`
 	Data IsOK   `json:"Data"`
 }
 
 type DeleteItemReq struct {
-	ID string `path:"ID"`
+	ID string `path:"id"`
 }
 
 type DeleteItemResp struct {
-	Code int    `json:"Code"`
+	Code int64  `json:"Code"`
 	Msg  string `json:"Msg"`
 	Data IsOK   `json:"Data"`
 }

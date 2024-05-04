@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/stores/mon"
+	"github.com/zeromicro/go-zero/core/stores/monc"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -27,7 +28,7 @@ const (
 	TagIndex   = "index"
 )
 
-func ensureIndexes(ctx context.Context, model any, collection *mon.Model) {
+func ensureIndexes(ctx context.Context, model any, collection *monc.Model) {
 	name, idxes := ParseModel(model)
 	_, err := collection.Indexes().CreateMany(ctx, idxes)
 	if err != nil {

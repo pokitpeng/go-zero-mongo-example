@@ -1,4 +1,4 @@
-package logic
+package item
 
 import (
 	"context"
@@ -33,9 +33,10 @@ func (l *GetItemLogic) GetItem(req *types.GetItemReq) (resp *types.GetItemResp, 
 		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("get item error: %v", err))
 	}
 	item := types.Item{}
-	if err = copier.Copy(&item, instance); err != nil {
+	if err = copier.Copy(&item, &instance); err != nil {
 		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("copy item error: %v", err))
 	}
+	item.ID = instance.ID.Hex()
 	return &types.GetItemResp{
 		Data: item,
 	}, nil
