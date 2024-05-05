@@ -1,7 +1,9 @@
 .PHONY: fmt go model run help
 
+APP_NAME="go_zero_example"
+
 build: ## build server
-	go build .
+	bash ./scripts/build.sh ${APP_NAME}
 
 fmt: ## format code
 	goctl api format --dir ./api
