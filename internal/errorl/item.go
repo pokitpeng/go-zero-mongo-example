@@ -6,6 +6,7 @@ import (
 
 const (
 	CodeItemModelInsertFailed = iota + 40200
+	CodeItemAlreadyExist
 	CodeItemModelDeleteFailed
 	CodeItemModelUpdateFailed
 	CodeItemModelFindFailed
@@ -15,6 +16,10 @@ const (
 
 func ItemModelInsertFailed(opts ...errorx.Option) error {
 	return errorx.New(CodeItemModelInsertFailed, "写入item库失败", opts...)
+}
+
+func ItemAlreadyExist(opts ...errorx.Option) error {
+	return errorx.New(CodeItemAlreadyExist, "item已存在", opts...)
 }
 
 func ItemModelDeleteFailed(opts ...errorx.Option) error {

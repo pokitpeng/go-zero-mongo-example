@@ -131,7 +131,7 @@ func (m *defaultUserModel) List(ctx context.Context, filter *User, offset, limit
 		Skip:  proto.Int64(int64(offset)),
 	}
 	if orderBy != "" {
-		if order == "desc" {
+		if order == "Desc" {
 			findOptions.SetSort(bson.D{{orderBy, -1}})
 		} else {
 			findOptions.SetSort(bson.D{{orderBy, 1}})

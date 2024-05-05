@@ -11,6 +11,7 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/protobuf/proto"
 )
 
 type CreateItemLogic struct {
@@ -28,6 +29,11 @@ func NewCreateItemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Create
 }
 
 func (l *CreateItemLogic) CreateItem(req *types.CreateItemReq) (resp *types.CreateItemResp, err error) {
+	find, _ := l.svcCtx.ItemModel.Find(l.ctx, &model.Item{Name: proto.String(req.Name)})
+	if len(find) > 0 {
+		return nil, errorl.ItemAlreadyExist(errorx.WithMeta(map[string]any{"Name": req.Name}))
+	}
+
 	id := primitive.NewObjectID()
 	newInstance := model.Item{}
 	if err = copier.Copy(&newInstance, req); err != nil {
