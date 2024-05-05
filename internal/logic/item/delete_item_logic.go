@@ -2,14 +2,12 @@ package item
 
 import (
 	"context"
-	"fmt"
-	"net/http"
-
+	"go_zero_example/internal/errorl"
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+	"go_zero_example/pkg/errorx"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/x/errors"
 )
 
 type DeleteItemLogic struct {
@@ -29,7 +27,7 @@ func NewDeleteItemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 func (l *DeleteItemLogic) DeleteItem(req *types.DeleteItemReq) (resp *types.DeleteItemResp, err error) {
 	_, err = l.svcCtx.ItemModel.Delete(l.ctx, req.ID, false)
 	if err != nil {
-		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("delete item error: %v", err))
+		return nil, errorl.ItemModelDeleteFailed(errorx.WithMeta(map[string]any{"ID": req.ID, "err": err}))
 	}
 	return &types.DeleteItemResp{
 		Code: 0,

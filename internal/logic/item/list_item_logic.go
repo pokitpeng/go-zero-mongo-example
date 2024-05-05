@@ -2,16 +2,14 @@ package item
 
 import (
 	"context"
-	"fmt"
-	model "go_zero_example/model/mongo"
-	"net/http"
-
+	"go_zero_example/internal/errorl"
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+	model "go_zero_example/model/mongo"
+	"go_zero_example/pkg/errorx"
 
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/x/errors"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -40,13 +38,13 @@ func (l *ListItemLogic) ListItem(req *types.ListItemReq) (resp *types.ListItemRe
 	order := req.Order
 	items, total, err := l.svcCtx.ItemModel.List(l.ctx, filter, offset, limit, orderBy, order)
 	if err != nil {
-		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("list items error:%v", err))
+		return nil, errorl.ItemModelListFailed(errorx.WithMeta(map[string]interface{}{"err": err}))
 	}
 	respItems := []*types.Item{}
 	for _, item := range items {
 		t := types.Item{}
 		if err = copier.Copy(&t, &item); err != nil {
-			return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("copy items error: %v", err))
+			return nil, errorl.CopyStructFailed(errorx.WithMeta(map[string]interface{}{"err": err}))
 		}
 		t.ID = item.ID.Hex()
 		respItems = append(respItems, &t)

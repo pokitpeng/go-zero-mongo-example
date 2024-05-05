@@ -2,15 +2,13 @@ package user
 
 import (
 	"context"
-	"fmt"
-	model "go_zero_example/model/mongo"
-	"net/http"
-
+	"go_zero_example/internal/errorl"
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+	model "go_zero_example/model/mongo"
+	"go_zero_example/pkg/errorx"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/x/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/protobuf/proto"
 )
@@ -30,6 +28,10 @@ func NewCreateUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Create
 }
 
 func (l *CreateUserLogic) CreateUser(req *types.CreateUserReq) (resp *types.CreateUserResp, err error) {
+	find, _ := l.svcCtx.UserModel.Find(l.ctx, &model.User{Username: proto.String(req.Username)})
+	if len(find) > 0 {
+		return nil, errorl.UserAlreadyExist(errorx.WithMeta(map[string]any{"Username": req.Username}))
+	}
 	id := primitive.NewObjectID()
 	err = l.svcCtx.UserModel.Insert(l.ctx, &model.User{
 		ID:       id,
@@ -37,7 +39,7 @@ func (l *CreateUserLogic) CreateUser(req *types.CreateUserReq) (resp *types.Crea
 		Password: proto.String(req.Password),
 	})
 	if err != nil {
-		return nil, errors.New(http.StatusBadRequest, fmt.Sprintf("create user error: %v", err))
+		return nil, errorl.UserModelInsertFailed(errorx.WithMeta(map[string]any{"ID": id.Hex(), "err": err}))
 	}
 	return &types.CreateUserResp{
 		Data: types.IsOK{

@@ -2,16 +2,14 @@ package item
 
 import (
 	"context"
-	"fmt"
-	model "go_zero_example/model/mongo"
-	"net/http"
-
+	"go_zero_example/internal/errorl"
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+	model "go_zero_example/model/mongo"
+	"go_zero_example/pkg/errorx"
 
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/x/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -33,11 +31,11 @@ func (l *CreateItemLogic) CreateItem(req *types.CreateItemReq) (resp *types.Crea
 	id := primitive.NewObjectID()
 	newInstance := model.Item{}
 	if err = copier.Copy(&newInstance, req); err != nil {
-		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("copy struct error: %v", err))
+		return nil, errorl.CopyStructFailed(errorx.WithMeta(map[string]interface{}{"err": err}))
 	}
 	newInstance.ID = id
 	if err = l.svcCtx.ItemModel.Insert(l.ctx, &newInstance); err != nil {
-		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("insert error: %v", err))
+		return nil, errorl.ItemModelInsertFailed(errorx.WithMeta(map[string]interface{}{"err": err}))
 	}
 	return &types.CreateItemResp{
 		Data: types.IsOK{

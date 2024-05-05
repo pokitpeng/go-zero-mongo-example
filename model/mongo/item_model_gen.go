@@ -18,6 +18,7 @@ var prefixItemCacheKey = "cache:item:"
 type itemModel interface {
 	Insert(ctx context.Context, data *Item) error
 	FindOne(ctx context.Context, id string) (*Item, error)
+	Find(ctx context.Context, filter *Item) ([]*Item, error)
 	Update(ctx context.Context, data *Item) (*mongo.UpdateResult, error)
 	Delete(ctx context.Context, id string, realDelete bool) (int64, error)
 	List(ctx context.Context, filter *Item, offset, limit int64, orderBy, order string) ([]*Item, int64, error)
@@ -62,6 +63,24 @@ func (m *defaultItemModel) FindOne(ctx context.Context, id string) (*Item, error
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultItemModel) Find(ctx context.Context, filter *Item) ([]*Item, error) {
+	var datas []*Item
+	if filter == nil {
+		filter = new(Item)
+	}
+	filter.DeleteAt = proto.Int64(0)
+
+	err := m.conn.Find(ctx, &datas, filter)
+	switch err {
+	case nil:
+	case monc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+	return datas, err
 }
 
 func (m *defaultItemModel) Update(ctx context.Context, data *Item) (*mongo.UpdateResult, error) {

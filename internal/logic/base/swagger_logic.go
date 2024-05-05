@@ -3,6 +3,7 @@ package base
 import (
 	"context"
 	"go_zero_example/api"
+	"go_zero_example/internal/errorl"
 	"go_zero_example/internal/svc"
 	"io"
 
@@ -28,7 +29,7 @@ func NewSwaggerLogic(ctx context.Context, svcCtx *svc.ServiceContext, writer io.
 func (l *SwaggerLogic) Swagger() error {
 	n, err := l.writer.Write(api.Swagger)
 	if err != nil {
-		return err
+		return errorl.WriteSwaggerFileFailed()
 	}
 	if n < len(api.Swagger) {
 		return io.ErrClosedPipe

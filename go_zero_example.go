@@ -1,25 +1,26 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"go/types"
 	"go_zero_example/internal/config"
 	"go_zero_example/internal/handler"
 	"go_zero_example/internal/svc"
+	"go_zero_example/pkg/errorx"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/x/errors"
 )
 
 var configFile = flag.String("f", "etc/go_zero_example-api.yaml", "the config file")
 
 type BaseResponse[T any] struct {
-	Code int    `json:"Code"`
+	Code int64  `json:"Code"`
 	Msg  string `json:"Msg"`
 	Data T      `json:"Data,omitempty"`
 }
@@ -39,11 +40,12 @@ func main() {
 	handler.RegisterHandlers(server, ctx)
 	// 自定义错误返回
 	httpx.SetErrorHandler(func(err error) (int, any) {
-		switch e := err.(type) {
-		case *errors.CodeMsg:
+		var e *errorx.Errorx
+		switch {
+		case errors.As(err, &e):
 			return http.StatusOK, BaseResponse[types.Nil]{
 				Code: e.Code,
-				Msg:  e.Msg,
+				Msg:  e.Error(),
 			}
 		default:
 			return http.StatusInternalServerError, err

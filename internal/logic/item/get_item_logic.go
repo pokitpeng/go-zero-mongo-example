@@ -2,15 +2,15 @@ package item
 
 import (
 	"context"
-	"fmt"
-	"net/http"
-
+	stdError "errors"
+	"go_zero_example/internal/errorl"
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+	model "go_zero_example/model/mongo"
+	"go_zero_example/pkg/errorx"
 
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/x/errors"
 )
 
 type GetItemLogic struct {
@@ -30,11 +30,14 @@ func NewGetItemLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetItemLo
 func (l *GetItemLogic) GetItem(req *types.GetItemReq) (resp *types.GetItemResp, err error) {
 	instance, err := l.svcCtx.ItemModel.FindOne(l.ctx, req.ID)
 	if err != nil {
-		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("get item error: %v", err))
+		if stdError.Is(err, model.ErrNotFound) {
+			return nil, errorl.ItemNotFound(errorx.WithMeta(map[string]interface{}{"ID": req.ID}))
+		}
+		return nil, errorl.ItemModelFindFailed(errorx.WithMeta(map[string]interface{}{"ID": req.ID}))
 	}
 	item := types.Item{}
 	if err = copier.Copy(&item, &instance); err != nil {
-		return nil, errors.New(http.StatusInternalServerError, fmt.Sprintf("copy item error: %v", err))
+		return nil, errorl.CopyStructFailed(errorx.WithMeta(map[string]interface{}{"err": err}))
 	}
 	item.ID = instance.ID.Hex()
 	return &types.GetItemResp{

@@ -18,6 +18,7 @@ import (
 type {{.lowerType}}Model interface{
     Insert(ctx context.Context,data *{{.Type}}) error
     FindOne(ctx context.Context,id string) (*{{.Type}}, error)
+    Find(ctx context.Context,filter *{{.Type}}) ([]*{{.Type}}, error)
     Update(ctx context.Context,data *{{.Type}}) (*mongo.UpdateResult, error)
     Delete(ctx context.Context,id string,realDelete bool) (int64, error)
     List(ctx context.Context,filter *{{.Type}},offset,limit int64,orderBy,order string) ([]*{{.Type}}, int64, error)
@@ -63,6 +64,24 @@ func (m *default{{.Type}}Model) FindOne(ctx context.Context, id string) (*{{.Typ
     default:
         return nil, err
     }
+}
+
+func (m *default{{.Type}}Model) Find(ctx context.Context, filter *{{.Type}}) ([]*{{.Type}}, error) {
+    var datas []*{{.Type}}
+    if filter == nil {
+		filter = new({{.Type}})
+	}
+	filter.DeleteAt = proto.Int64(0)
+
+  err := m.conn.Find(ctx, &datas, filter)
+    switch err {
+    case nil:
+    case {{if .Cache}}monc{{else}}mon{{end}}.ErrNotFound:
+        return nil, ErrNotFound
+    default:
+        return nil, err
+    }
+    return datas, err
 }
 
 func (m *default{{.Type}}Model) Update(ctx context.Context, data *{{.Type}}) (*mongo.UpdateResult, error) {

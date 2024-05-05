@@ -2,8 +2,9 @@ package user
 
 import (
 	"context"
+	"go_zero_example/internal/errorl"
 	model "go_zero_example/model/mongo"
-	"net/http"
+	"go_zero_example/pkg/errorx"
 	"time"
 
 	"go_zero_example/internal/svc"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/x/errors"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -32,16 +32,16 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
 	list, _, err := l.svcCtx.UserModel.List(l.ctx, &model.User{Username: proto.String(req.Username)}, 0, 10, "", "")
 	if err != nil || len(list) != 1 {
-		return nil, errors.New(http.StatusBadRequest, "用户名不存在")
+		return nil, errorl.UserNotFound(errorx.WithMeta(map[string]any{"Username": req.Username, "err": err}))
 	}
 	dbInstance := list[0]
 	if *dbInstance.Password != req.Password {
-		return nil, errors.New(http.StatusBadRequest, "用户名或密码错误")
+		return nil, errorl.UsernameOrPasswordWrong()
 	}
 	now := time.Now()
 	token, err := generateToken(l.svcCtx.Config.Auth.AccessSecret, now.Unix(), l.svcCtx.Config.Auth.AccessExpire)
 	if err != nil {
-		return nil, errors.New(http.StatusInternalServerError, "生成令牌失败")
+		return nil, errorl.GenerateTokenFailed(errorx.WithMeta(map[string]any{"err": err}))
 	}
 	return &types.LoginResp{
 		Data: types.LoginRespData{

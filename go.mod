@@ -3,6 +3,7 @@ module go_zero_example
 go 1.21.7
 
 require (
+	github.com/go-resty/resty/v2 v2.12.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/zeromicro/go-zero v1.6.4

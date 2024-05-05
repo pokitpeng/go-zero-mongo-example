@@ -18,6 +18,7 @@ var prefixUserCacheKey = "cache:user:"
 type userModel interface {
 	Insert(ctx context.Context, data *User) error
 	FindOne(ctx context.Context, id string) (*User, error)
+	Find(ctx context.Context, filter *User) ([]*User, error)
 	Update(ctx context.Context, data *User) (*mongo.UpdateResult, error)
 	Delete(ctx context.Context, id string, realDelete bool) (int64, error)
 	List(ctx context.Context, filter *User, offset, limit int64, orderBy, order string) ([]*User, int64, error)
@@ -62,6 +63,24 @@ func (m *defaultUserModel) FindOne(ctx context.Context, id string) (*User, error
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultUserModel) Find(ctx context.Context, filter *User) ([]*User, error) {
+	var datas []*User
+	if filter == nil {
+		filter = new(User)
+	}
+	filter.DeleteAt = proto.Int64(0)
+
+	err := m.conn.Find(ctx, &datas, filter)
+	switch err {
+	case nil:
+	case monc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+	return datas, err
 }
 
 func (m *defaultUserModel) Update(ctx context.Context, data *User) (*mongo.UpdateResult, error) {
