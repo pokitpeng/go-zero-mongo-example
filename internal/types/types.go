@@ -5,14 +5,19 @@ type IsOK struct {
 	IsOK bool `json:"IsOK"`
 }
 
-type Version struct {
-	Version string `json:"Version"`
-}
-
 type VersionResp struct {
-	Code int64   `json:"Code"`
-	Msg  string  `json:"Msg"`
-	Data Version `json:"Data"`
+	AppName    string `json:"AppName"`
+	AppVersion string `json:"AppVersion"`
+	GoVersion  string `json:"GoVersion"`
+	GitRepoUrl string `json:"GitRepoUrl"`
+	GitTag     string `json:"GitTag"`
+	GitHash    string `json:"GitHash"`
+	BuildOS    string `json:"BuildOS"`
+	BuildArch  string `json:"BuildArch"`
+	TargetOS   string `json:"TargetOS"`
+	TargetArch string `json:"TargetArch"`
+	BuildTime  string `json:"BuildTime"`
+	BuildUser  string `json:"BuildUser"`
 }
 
 type User struct {

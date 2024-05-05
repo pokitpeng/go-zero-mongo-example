@@ -9,7 +9,9 @@ import (
 	"go_zero_example/internal/handler"
 	"go_zero_example/internal/svc"
 	"go_zero_example/pkg/errorx"
+	"go_zero_example/version"
 	"net/http"
+	"os"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -18,6 +20,7 @@ import (
 )
 
 var configFile = flag.String("f", "etc/go_zero_example-api.yaml", "the config file")
+var showVersion = flag.Bool("v", false, "show version")
 
 type BaseResponse[T any] struct {
 	Code int64  `json:"Code"`
@@ -27,6 +30,10 @@ type BaseResponse[T any] struct {
 
 func main() {
 	flag.Parse()
+	if *showVersion {
+		fmt.Println(version.New())
+		os.Exit(0)
+	}
 
 	logx.DisableStat() // 关闭stat日志
 

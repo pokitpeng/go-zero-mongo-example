@@ -2,6 +2,7 @@ package version
 
 import (
 	"fmt"
+	"go_zero_example/internal/types"
 	"strings"
 )
 
@@ -26,6 +27,23 @@ type Version struct{}
 
 func New() *Version {
 	return &Version{}
+}
+
+func NewVersion() *types.VersionResp {
+	return &types.VersionResp{
+		BuildTime:  BuildTime,
+		GoVersion:  GoVersion,
+		GitRepoUrl: GitRepoUrl,
+		BuildArch:  BuildArch,
+		BuildUser:  BuildUser,
+		GitHash:    GitHash,
+		TargetOS:   TargetOS,
+		TargetArch: TargetArch,
+		AppName:    AppName,
+		AppVersion: AppVersion,
+		GitTag:     GitTag,
+		BuildOS:    BuildOS,
+	}
 }
 
 func (v *Version) String() string {

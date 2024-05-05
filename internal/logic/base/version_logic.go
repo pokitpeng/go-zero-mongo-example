@@ -2,9 +2,9 @@ package base
 
 import (
 	"context"
-
 	"go_zero_example/internal/svc"
 	"go_zero_example/internal/types"
+	"go_zero_example/version"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,11 +24,5 @@ func NewVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VersionLo
 }
 
 func (l *VersionLogic) Version() (resp *types.VersionResp, err error) {
-	return &types.VersionResp{
-		Code: 0,
-		Msg:  "",
-		Data: types.Version{
-			Version: "v0.0.0",
-		},
-	}, nil
+	return version.NewVersion(), nil
 }
