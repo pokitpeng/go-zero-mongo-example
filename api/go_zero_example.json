@@ -644,37 +644,60 @@
         "CreateAt"
       ]
     },
-    "Version": {
-      "type": "object",
-      "properties": {
-        "Version": {
-          "type": "string"
-        }
-      },
-      "title": "Version",
-      "required": [
-        "Version"
-      ]
-    },
     "VersionResp": {
       "type": "object",
       "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
+        "AppName": {
           "type": "string"
         },
-        "Data": {
-          "$ref": "#/definitions/Version"
+        "AppVersion": {
+          "type": "string"
+        },
+        "GoVersion": {
+          "type": "string"
+        },
+        "GitRepoUrl": {
+          "type": "string"
+        },
+        "GitTag": {
+          "type": "string"
+        },
+        "GitHash": {
+          "type": "string"
+        },
+        "BuildOS": {
+          "type": "string"
+        },
+        "BuildArch": {
+          "type": "string"
+        },
+        "TargetOS": {
+          "type": "string"
+        },
+        "TargetArch": {
+          "type": "string"
+        },
+        "BuildTime": {
+          "type": "string"
+        },
+        "BuildUser": {
+          "type": "string"
         }
       },
       "title": "VersionResp",
       "required": [
-        "Code",
-        "Msg",
-        "Data"
+        "AppName",
+        "AppVersion",
+        "GoVersion",
+        "GitRepoUrl",
+        "GitTag",
+        "GitHash",
+        "BuildOS",
+        "BuildArch",
+        "TargetOS",
+        "TargetArch",
+        "BuildTime",
+        "BuildUser"
       ]
     }
   },

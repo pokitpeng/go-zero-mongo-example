@@ -44,12 +44,10 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 		return nil, errorl.GenerateTokenFailed(errorx.WithMeta(map[string]any{"err": err}))
 	}
 	return &types.LoginResp{
-		Data: types.LoginRespData{
-			Token:    token,
-			ExpireAt: now.Add(time.Duration(l.svcCtx.Config.Auth.AccessExpire) * time.Second).Format("2006-01-02 15:04:05"),
-			ID:       dbInstance.ID.Hex(),
-			Username: *dbInstance.Username,
-		},
+		Token:    token,
+		ExpireAt: now.Add(time.Duration(l.svcCtx.Config.Auth.AccessExpire) * time.Second).Format("2006-01-02 15:04:05"),
+		ID:       dbInstance.ID.Hex(),
+		Username: *dbInstance.Username,
 	}, nil
 }
 

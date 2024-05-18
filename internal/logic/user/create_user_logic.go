@@ -41,9 +41,5 @@ func (l *CreateUserLogic) CreateUser(req *types.CreateUserReq) (resp *types.Crea
 	if err != nil {
 		return nil, errorl.UserModelInsertFailed(errorx.WithMeta(map[string]any{"ID": id.Hex(), "err": err}))
 	}
-	return &types.CreateUserResp{
-		Data: types.IsOK{
-			IsOK: true,
-		},
-	}, nil
+	return &types.CreateUserResp{}, nil
 }

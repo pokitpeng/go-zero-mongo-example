@@ -41,6 +41,6 @@ func (l *GetItemLogic) GetItem(req *types.GetItemReq) (resp *types.GetItemResp, 
 	}
 	item.ID = instance.ID.Hex()
 	return &types.GetItemResp{
-		Data: item,
+		Item: item,
 	}, nil
 }

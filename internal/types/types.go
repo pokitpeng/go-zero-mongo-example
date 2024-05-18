@@ -34,9 +34,6 @@ type CreateUserReq struct {
 }
 
 type CreateUserResp struct {
-	Code int64  `json:"Code"`
-	Msg  string `json:"Msg"`
-	Data IsOK   `json:"Data"`
 }
 
 type LoginReq struct {
@@ -44,17 +41,11 @@ type LoginReq struct {
 	Password string `json:"Password"`
 }
 
-type LoginRespData struct {
+type LoginResp struct {
 	ID       string `json:"ID"`
 	Username string `json:"Username"`
 	Token    string `json:"Token"`
 	ExpireAt string `json:"ExpireAt"`
-}
-
-type LoginResp struct {
-	Code int64         `json:"Code"`
-	Msg  string        `json:"Msg"`
-	Data LoginRespData `json:"Data"`
 }
 
 type Item struct {
@@ -73,9 +64,6 @@ type CreateItemReq struct {
 }
 
 type CreateItemResp struct {
-	Code int64  `json:"Code"`
-	Msg  string `json:"Msg"`
-	Data IsOK   `json:"Data"`
 }
 
 type GetItemReq struct {
@@ -83,9 +71,7 @@ type GetItemReq struct {
 }
 
 type GetItemResp struct {
-	Code int64  `json:"Code"`
-	Msg  string `json:"Msg"`
-	Data Item   `json:"Data"`
+	Item Item `json:"Item"`
 }
 
 type ListItemReq struct {
@@ -97,9 +83,7 @@ type ListItemReq struct {
 }
 
 type ListItemResp struct {
-	Code  int64   `json:"Code"`
-	Msg   string  `json:"Msg"`
-	Data  []*Item `json:"Data"`
+	Items []*Item `json:"Items"`
 	Total int64   `json:"Total"`
 }
 
@@ -108,9 +92,6 @@ type UpdateItemReq struct {
 }
 
 type UpdateItemResp struct {
-	Code int64  `json:"Code"`
-	Msg  string `json:"Msg"`
-	Data IsOK   `json:"Data"`
 }
 
 type DeleteItemReq struct {
@@ -118,7 +99,4 @@ type DeleteItemReq struct {
 }
 
 type DeleteItemResp struct {
-	Code int64  `json:"Code"`
-	Msg  string `json:"Msg"`
-	Data IsOK   `json:"Data"`
 }

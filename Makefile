@@ -10,14 +10,14 @@ fmt: ## format code
 	gofumpt -w ./api
 
 go: fmt ## generate go code
-	goctl api go -api ./api/*.api -dir . -style go_zero
+	goctl api go -api ./api/*.api -dir . -style go_zero --home tpl
 
 model: ## generate model code
 	goctl model mongo --type user,item --dir model/mongo -style go_zero -e --home tpl -c
 
 swagger: fmt ## generate swagger docs
-	rm -rf ./api/go_zero_example.json
-	goctl api plugin -plugin goctl-swagger="swagger -filename go_zero_example.json" -api ./api/go_zero_example.api -dir ./api
+	rm -rf ./api/${APP_NAME}.json
+	goctl api plugin -plugin goctl-swagger="swagger -filename ${APP_NAME}.json" -api ./api/${APP_NAME}.api -dir ./api
 
 run: ## run server
 	go run .

@@ -49,12 +49,8 @@ func (l *UpdateItemLogic) UpdateItem(req *types.UpdateItemReq) (resp *types.Upda
 	if err != nil {
 		return nil, errorl.ItemModelUpdateFailed(errorx.WithMeta(map[string]interface{}{"ID": req.ID, "err": err}))
 	}
-
-	return &types.UpdateItemResp{
-		Code: 0,
-		Msg:  "",
-		Data: types.IsOK{
-			IsOK: updated.ModifiedCount > 0,
-		},
-	}, nil
+	if updated.ModifiedCount == 0 {
+		return nil, errorl.ItemModelUpdateFailed()
+	}
+	return &types.UpdateItemResp{}, nil
 }

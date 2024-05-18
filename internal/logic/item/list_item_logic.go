@@ -51,9 +51,7 @@ func (l *ListItemLogic) ListItem(req *types.ListItemReq) (resp *types.ListItemRe
 	}
 
 	return &types.ListItemResp{
-		Code:  0,
-		Msg:   "",
-		Data:  respItems,
+		Items: respItems,
 		Total: total,
 	}, nil
 }

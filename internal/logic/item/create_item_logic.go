@@ -43,9 +43,5 @@ func (l *CreateItemLogic) CreateItem(req *types.CreateItemReq) (resp *types.Crea
 	if err = l.svcCtx.ItemModel.Insert(l.ctx, &newInstance); err != nil {
 		return nil, errorl.ItemModelInsertFailed(errorx.WithMeta(map[string]interface{}{"err": err}))
 	}
-	return &types.CreateItemResp{
-		Data: types.IsOK{
-			IsOK: true,
-		},
-	}, nil
+	return &types.CreateItemResp{}, nil
 }

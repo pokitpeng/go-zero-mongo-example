@@ -29,11 +29,5 @@ func (l *DeleteItemLogic) DeleteItem(req *types.DeleteItemReq) (resp *types.Dele
 	if err != nil {
 		return nil, errorl.ItemModelDeleteFailed(errorx.WithMeta(map[string]any{"ID": req.ID, "err": err}))
 	}
-	return &types.DeleteItemResp{
-		Code: 0,
-		Msg:  "ok",
-		Data: types.IsOK{
-			IsOK: true,
-		},
-	}, nil
+	return &types.DeleteItemResp{}, nil
 }

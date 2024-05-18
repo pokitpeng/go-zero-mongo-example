@@ -74,27 +74,19 @@ type (
 		Username string `json:"Username"`
 		Password string `json:"Password"`
 	}
-	CreateUserResp {
-		Code int64  `json:"Code"`
-		Msg  string `json:"Msg"`
-		Data IsOK   `json:"Data"`
-	}
+
+	CreateUserResp struct{}
+
 	LoginReq {
 		Username string `json:"Username"`
 		Password string `json:"Password"`
 	}
 
-	LoginRespData {
+	LoginResp {
 		ID       string `json:"ID"`
 		Username string `json:"Username"`
 		Token    string `json:"Token"`
 		ExpireAt string `json:"ExpireAt"`
-	}
-
-	LoginResp {
-		Code int64         `json:"Code"`
-		Msg  string        `json:"Msg"`
-		Data LoginRespData `json:"Data"`
 	}
 )
 
@@ -113,18 +105,12 @@ type (
 		Age    int64  `json:"Age"`
 		Secret string `json:"Secret"`
 	}
-	CreateItemResp {
-		Code int64  `json:"Code"`
-		Msg  string `json:"Msg"`
-		Data IsOK   `json:"Data"`
-	}
-	GetItemReq {
+	CreateItemResp struct{}
+	GetItemReq     {
 		ID string `path:"id"`
 	}
 	GetItemResp {
-		Code int64  `json:"Code"`
-		Msg  string `json:"Msg"`
-		Data Item   `json:"Data"`
+		Item Item `json:"Item"`
 	}
 	ListItemReq {
 		Name    string `form:"Name,optional"`
@@ -134,25 +120,15 @@ type (
 		Order   string `form:"Order,optional,default=Desc,options=[Desc,Asc]"`
 	}
 	ListItemResp {
-		Code  int64   `json:"Code"`
-		Msg   string  `json:"Msg"`
-		Data  []*Item `json:"Data"`
+		Items []*Item `json:"Items"`
 		Total int64   `json:"Total"`
 	}
 	UpdateItemReq {
 		*Item
 	}
-	UpdateItemResp {
-		Code int64  `json:"Code"`
-		Msg  string `json:"Msg"`
-		Data IsOK   `json:"Data"`
-	}
-	DeleteItemReq {
+	UpdateItemResp struct{}
+	DeleteItemReq  {
 		ID string `path:"id"`
 	}
-	DeleteItemResp {
-		Code int64  `json:"Code"`
-		Msg  string `json:"Msg"`
-		Data IsOK   `json:"Data"`
-	}
+	DeleteItemResp struct{}
 )
