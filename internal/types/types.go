@@ -24,6 +24,8 @@ type User struct {
 	ID       string `json:"ID"`
 	Username string `json:"Username"`
 	Password string `json:"Password"`
+	Avatar   string `json:"Avatar"`
+	Role     string `json:"Role"`
 	UpdateAt int64  `json:"UpdateAt"`
 	CreateAt int64  `json:"CreateAt"`
 }
@@ -31,6 +33,8 @@ type User struct {
 type CreateUserReq struct {
 	Username string `json:"Username"`
 	Password string `json:"Password"`
+	Avatar   string `json:"Avatar"`
+	Role     string `json:"Role"`
 }
 
 type CreateUserResp struct {
@@ -46,6 +50,14 @@ type LoginResp struct {
 	Username string `json:"Username"`
 	Token    string `json:"Token"`
 	ExpireAt string `json:"ExpireAt"`
+}
+
+type GetUserInfoReq struct {
+	ID string `path:"id"`
+}
+
+type GetUserInfoResp struct {
+	User User `json:"User"`
 }
 
 type Item struct {

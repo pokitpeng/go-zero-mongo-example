@@ -257,6 +257,35 @@
         ]
       }
     },
+    "/api/user/{id}": {
+      "get": {
+        "operationId": "GetUserInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetUserInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
     "/swagger": {
       "get": {
         "operationId": "Swagger",
@@ -312,24 +341,7 @@
     },
     "CreateItemResp": {
       "type": "object",
-      "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
-          "$ref": "#/definitions/IsOK"
-        }
-      },
-      "title": "CreateItemResp",
-      "required": [
-        "Code",
-        "Msg",
-        "Data"
-      ]
+      "title": "CreateItemResp"
     },
     "CreateUserReq": {
       "type": "object",
@@ -339,34 +351,25 @@
         },
         "Password": {
           "type": "string"
+        },
+        "Avatar": {
+          "type": "string"
+        },
+        "Role": {
+          "type": "string"
         }
       },
       "title": "CreateUserReq",
       "required": [
         "Username",
-        "Password"
+        "Password",
+        "Avatar",
+        "Role"
       ]
     },
     "CreateUserResp": {
       "type": "object",
-      "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
-          "$ref": "#/definitions/IsOK"
-        }
-      },
-      "title": "CreateUserResp",
-      "required": [
-        "Code",
-        "Msg",
-        "Data"
-      ]
+      "title": "CreateUserResp"
     },
     "DeleteItemReq": {
       "type": "object",
@@ -374,24 +377,7 @@
     },
     "DeleteItemResp": {
       "type": "object",
-      "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
-          "$ref": "#/definitions/IsOK"
-        }
-      },
-      "title": "DeleteItemResp",
-      "required": [
-        "Code",
-        "Msg",
-        "Data"
-      ]
+      "title": "DeleteItemResp"
     },
     "GetItemReq": {
       "type": "object",
@@ -400,22 +386,29 @@
     "GetItemResp": {
       "type": "object",
       "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
+        "Item": {
           "$ref": "#/definitions/Item"
         }
       },
       "title": "GetItemResp",
       "required": [
-        "Code",
-        "Msg",
-        "Data"
+        "Item"
+      ]
+    },
+    "GetUserInfoReq": {
+      "type": "object",
+      "title": "GetUserInfoReq"
+    },
+    "GetUserInfoResp": {
+      "type": "object",
+      "properties": {
+        "User": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "title": "GetUserInfoResp",
+      "required": [
+        "User"
       ]
     },
     "IsOK": {
@@ -502,14 +495,7 @@
     "ListItemResp": {
       "type": "object",
       "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
+        "Items": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Item"
@@ -522,9 +508,7 @@
       },
       "title": "ListItemResp",
       "required": [
-        "Code",
-        "Msg",
-        "Data",
+        "Items",
         "Total"
       ]
     },
@@ -547,27 +531,6 @@
     "LoginResp": {
       "type": "object",
       "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
-          "$ref": "#/definitions/LoginRespData"
-        }
-      },
-      "title": "LoginResp",
-      "required": [
-        "Code",
-        "Msg",
-        "Data"
-      ]
-    },
-    "LoginRespData": {
-      "type": "object",
-      "properties": {
         "ID": {
           "type": "string"
         },
@@ -581,7 +544,7 @@
           "type": "string"
         }
       },
-      "title": "LoginRespData",
+      "title": "LoginResp",
       "required": [
         "ID",
         "Username",
@@ -595,24 +558,7 @@
     },
     "UpdateItemResp": {
       "type": "object",
-      "properties": {
-        "Code": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Msg": {
-          "type": "string"
-        },
-        "Data": {
-          "$ref": "#/definitions/IsOK"
-        }
-      },
-      "title": "UpdateItemResp",
-      "required": [
-        "Code",
-        "Msg",
-        "Data"
-      ]
+      "title": "UpdateItemResp"
     },
     "User": {
       "type": "object",
@@ -624,6 +570,12 @@
           "type": "string"
         },
         "Password": {
+          "type": "string"
+        },
+        "Avatar": {
+          "type": "string"
+        },
+        "Role": {
           "type": "string"
         },
         "UpdateAt": {
@@ -640,6 +592,8 @@
         "ID",
         "Username",
         "Password",
+        "Avatar",
+        "Role",
         "UpdateAt",
         "CreateAt"
       ]

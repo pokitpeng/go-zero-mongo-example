@@ -23,6 +23,16 @@ service go_zero_example-api {
 
 @server(
 	prefix: /api
+	group: user
+	jwt: Auth
+)
+service go_zero_example-api {
+	@handler GetUserInfo
+	get /user/:id (GetUserInfoReq) returns (GetUserInfoResp)
+}
+
+@server(
+	prefix: /api
 	jwt: Auth // 开启 jwt 认证
 	group: item
 )
@@ -66,6 +76,8 @@ type (
 		ID       string `json:"ID"`
 		Username string `json:"Username"`
 		Password string `json:"Password"`
+		Avatar   string `json:"Avatar"`
+		Role     string `json:"Role"`
 		UpdateAt int64  `json:"UpdateAt"`
 		CreateAt int64  `json:"CreateAt"`
 	}
@@ -73,6 +85,8 @@ type (
 	CreateUserReq {
 		Username string `json:"Username"`
 		Password string `json:"Password"`
+		Avatar   string `json:"Avatar"`
+		Role     string `json:"Role"`
 	}
 
 	CreateUserResp struct{}
@@ -87,6 +101,14 @@ type (
 		Username string `json:"Username"`
 		Token    string `json:"Token"`
 		ExpireAt string `json:"ExpireAt"`
+	}
+
+	GetUserInfoReq {
+		ID string `path:"id"`
+	}
+
+	GetUserInfoResp {
+		User User `json:"User"`
 	}
 )
 

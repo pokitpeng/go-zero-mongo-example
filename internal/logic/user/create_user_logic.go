@@ -37,6 +37,8 @@ func (l *CreateUserLogic) CreateUser(req *types.CreateUserReq) (resp *types.Crea
 		ID:       id,
 		Username: proto.String(req.Username),
 		Password: proto.String(req.Password),
+		Avatar:   proto.String(req.Avatar),
+		Role:     proto.String(req.Role),
 	})
 	if err != nil {
 		return nil, errorl.UserModelInsertFailed(errorx.WithMeta(map[string]any{"ID": id.Hex(), "err": err}))

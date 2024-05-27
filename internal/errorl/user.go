@@ -10,6 +10,7 @@ const (
 	CodeUsernameOrPasswordWrong
 	CodeUserModelInsertFailed
 	CodeGenerateTokenFailed
+	CodeGetUserInfoFailed
 )
 
 func UserAlreadyExist(opts ...errorx.Option) error {
@@ -30,4 +31,8 @@ func UserModelInsertFailed(opts ...errorx.Option) error {
 
 func GenerateTokenFailed(opts ...errorx.Option) error {
 	return errorx.New(CodeGenerateTokenFailed, "生成token失败", opts...)
+}
+
+func GetUserInfoFailed(opts ...errorx.Option) error {
+	return errorx.New(CodeGetUserInfoFailed, "获取用户信息失败", opts...)
 }
